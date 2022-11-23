@@ -1,0 +1,78 @@
+syntax = "proto3";
+//import "google/protobuf/empty.proto";
+
+//blockchain service and the function definition
+service BlockChain {
+    rpc new_genesis_block(new_genesis_block_request) returns (new_genesis_block_request){}
+    rpc new_block(new_block_request) returns (new_block_response){}
+    rpc query_blockchain(query_blockchain_request) returns(query_blockchain_response){}
+    rpc StartEvent(StartEventRequest) returns (StartEventResponse) {}
+
+}
+message new_genesis_block_request{
+
+}
+message new_genesis_block_response{
+    Block genesis_block=1;
+}
+//
+message Event{
+  int32 event_type=1;
+  int32 amount=2;
+  string eventNo=3;
+  string need_index=4;
+  string donator_bank_account=5;
+  string donatee_bank_account=6;
+  string donatee_name=7;
+  string donatee_idNo=8;
+  string key_income_proof=9;
+  string key_medical_record=10;
+  string key_hospital_payment=11;
+  bool isConfirmed=12;
+
+}
+
+
+message new_block_request{
+    
+    string prevblockhash=1;
+    int32 index=2;
+
+}
+
+message new_block_response{
+    Block block=1;
+}
+
+message query_blockchain_request{
+    string msg=1;
+}
+message Block{
+    int32 index=1;
+    string timestamp=2;
+    repeated Event events=3;
+    string PrevBlockHash=4;
+    int32  Nonce=5;
+    string CurrentHash=6;
+    int32 difficulty=7;
+}
+message query_blockchain_response{
+    repeated Block blocks= 1;
+}
+
+message StartEventRequest{
+  int32 event_type=1;
+  int32 amount=2;
+  string need_index=3;
+  string donator_bank_account=4;
+  string donatee_bank_account=5;
+  string donatee_name=6;
+  string donatee_idNo=7;
+  string key_income_proof=8;
+  string key_medical_record=9;
+  string key_hospital_payment=10;
+  bool isConfirmed=11;
+}
+message StartEventResponse{
+  string eventNo=1;
+}
