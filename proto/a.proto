@@ -56,6 +56,9 @@ message Block{
     string CurrentHash=6;
     int32 difficulty=7;
 }
+message q_blockchain_response{
+    repeated string blocks= 1;
+}
 message query_blockchain_response{
     repeated Block blocks= 1;
 }

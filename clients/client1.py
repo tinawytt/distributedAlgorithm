@@ -6,7 +6,7 @@ import time
 import grpc
 from proto import a_pb2 as blockchain_pb2
 from proto import a_pb2_grpc as blockchain_pb2_grpc
-
+from block import *
 def new_block():
     print("generate new block")
     with grpc.insecure_channel('127.0.0.1:50051') as channel:
@@ -18,7 +18,7 @@ def new_genesis_block():
     with grpc.insecure_channel('127.0.0.1:50051') as channel:
         stub = blockchain_pb2_grpc.BlockChainStub(channel)
         response=stub.new_genesis_block(blockchain_pb2.new_genesis_block_request())
-        print(response['Hash'])
+        print(response)
 
 def add_block():
     print("add the block to the blockchain!")
@@ -37,20 +37,21 @@ def query_blockchain():
 def new_a_block():
     with grpc.insecure_channel('127.0.0.1:50051') as channel:
         stub = blockchain_pb2_grpc.BlockChainStub(channel)
-        response=stub.new_block(blockchain_pb2.new_block_request(prevblockhash="1234",index=5))
+        response=stub.new_block(blockchain_pb2.new_block_request(prevblockhash="efb26dbb8165dab135f04a338e31b49cba2d590ef9f4fa90786fdfc8c709b645",index=1))
         print("==new_block response==")
         print(response)
         print("=========")
+        
 def broadcast():
     print("broadcast to other nodes")
 def send_block():
     print("send block to other nodes")
 
 
+        
 
 if __name__ == '__main__':
     logging.basicConfig()
-    # test query blockchain
     
+    # new_genesis_block()
     new_a_block()
-    query_blockchain()

@@ -12,8 +12,8 @@ class Event:
                  donatee_bank_account,donatee_name,
               donatee_idNo,key_income_proof,key_medical_record,
               key_hospital_payment,isConfirmed):
-        self.event_type=1
-        self.amount=0
+        self.event_type=event_type
+        self.amount=amount
         self.eventNo=eventNo
         self.need_index=need_index
         self.donator_bank_account=donator_bank_account

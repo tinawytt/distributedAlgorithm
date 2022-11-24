@@ -38,9 +38,50 @@ def new_block(event,prevhash,index):
 
     return block
 def new_genesis_block():
+    # new a genesis block and add it into blockchain directly
     genesis_block=new_block("","",0)
+    blocks = Blockchain().blocks
+    print("=====")
+    print(genesis_block)
+    print("=====")
+    print(str(genesis_block))
+    blocks.set(genesis_block["Hash"], str(genesis_block))
+    blocks.set("l", genesis_block["Hash"])
     return genesis_block
+
 def add_block(block):
+    flag=0
+    blocks=Blockchain().blocks
+    # if len(get_blockchain("hi"))==0:
+    #     # blocks.append(block)
+    #     print(block)
+    last_hash=blocks.get("l").decode()
+    # print(blocks.get(last_hash))
+    # print("enter add a block")
+    # if block["PrevBlockHash"]==last_hash:
+    #     flag+=1
+    #     print("satisfy1")
+    # print(type(blocks.get(last_hash)))
+    # print(blocks.get(last_hash))
+    
+    # print(str(blocks.get(last_hash))[2:-1])
+    # print(json.loads("\""+str(blocks.get(last_hash))[2:-1])+"\"")
+    # if block["TimeStamp"]>json.loads("\""+str(blocks.get(last_hash))[2:-1]+"\"")["TimeStamp"]:
+    #     flag+=1
+    #     print("satisfy2")
+    # if int(block['Hash'],16)<2**(256-block["Difficulty"]):
+    #     flag+=1
+    #     print("satisfy3")
+    # if flag==3:
+
+        # blocks.append(block)
+        # print("===add block function==")
+        # print(block.decode())
+    blocks.set(block["Hash"],str(block))
+    blocks.set("l",block["Hash"])
+    # else:
+    #     print("block is not valid!")
+def add_block2(block):
     flag=0
     blocks=Blockchain().blocks
     if len(get_blockchain("hi"))==0:
@@ -83,5 +124,6 @@ def get_blockchain(string):
     # print(blocks['Index'])
     # 对blocks 排序，按照index 从小到大
     # blocks.sort(key=lambda x: x['Index'], reverse=False)
-    # blocks=sorted(range(len(blocks)),key=lambda Index: blocks['Index'], reverse=False)
+    # blocks=sorted(blocks,key= blocks["Index"], reverse=False)
     return blocks
+

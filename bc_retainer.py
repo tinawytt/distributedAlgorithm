@@ -5,7 +5,7 @@ import proto.a_pb2 as blockchain_pb2
 import proto.a_pb2_grpc as blockchain_pb2_grpc
 from bc_definition import *
 from block import *
-
+import json
 # We implement the function at server class
 class BlockchainServer(blockchain_pb2_grpc.BlockChainServicer):
     # When the server created, a new blockchain will be created too
@@ -13,7 +13,19 @@ class BlockchainServer(blockchain_pb2_grpc.BlockChainServicer):
         self.blockchain = Blockchain()
         self.waiting_events=[]
         self.confirmed_events=[]
-    def new_genesis_block(self,request,response):
+    def new_genesis_block(self, request, response):
+        genesis_block = new_genesis_block()
+        pb_genesis_block = blockchain_pb2.Block(index=genesis_block["Index"],
+                                                timestamp=genesis_block["TimeStamp"],
+                                                events=genesis_block["Events"],
+                                                PrevBlockHash=genesis_block["PrevBlockHash"],
+                                                Nonce=genesis_block["Nonce"],
+                                                CurrentHash=genesis_block["Hash"],
+                                                difficulty=genesis_block["Difficulty"])
+        print(pb_genesis_block)
+        response = blockchain_pb2.new_genesis_block_response(genesis_block=pb_genesis_block)
+        return response
+    def new_genesis_block2(self,request,response):
         genesis_block=new_genesis_block()
         pb_genesis_block=blockchain_pb2.Block(index=genesis_block["Index"],timestamp=genesis_block["TimeStamp"],events=genesis_block["Events"],PrevBlockHash=genesis_block["PrevBlockHash"],Nonce=genesis_block["Nonce"],CurrentHash=genesis_block["Hash"],difficulty=genesis_block["Difficulty"])
         response=blockchain_pb2.new_genesis_block_response(genesis_block=pb_genesis_block)
@@ -22,11 +34,19 @@ class BlockchainServer(blockchain_pb2_grpc.BlockChainServicer):
         
         blocks=[]
         for i in range(len(get_blockchain(request.msg))):
-
-            dict1=eval(get_blockchain(request.msg)[i])
-            block=blockchain_pb2.Block(index=dict1["Index"],timestamp=dict1["TimeStamp"],events=dict1["Events"],PrevBlockHash=dict1["PrevBlockHash"],Nonce=dict1["Nonce"],CurrentHash=dict1["Hash"],difficulty=dict1["Difficulty"])
-            blocks.append(block)
-        response = blockchain_pb2.query_blockchain_response(blocks=blocks)
+            print(get_blockchain(request.msg)[i])
+            
+            str1=str(get_blockchain(request.msg)[i])[2:-1]
+            print(str1)
+            str2=str1.replace('\'','\"')
+            str3=str2.replace('<','\"<')
+            str4=str3.replace('>','>\"')
+            print(str4)
+            blocks.append(str4)
+            
+            
+            
+        response = blockchain_pb2.q_blockchain_response(blocks=blocks)
         return response
     def new_block(self,request,response):
         if(len(self.confirmed_events)>0):
@@ -48,7 +68,8 @@ class BlockchainServer(blockchain_pb2_grpc.BlockChainServicer):
                              Nonce=nblock["Nonce"],CurrentHash=nblock["Hash"],
                              difficulty=nblock["Difficulty"])
             response = blockchain_pb2.new_block_response(block=pb_new_block)
-            add_block(bytes('{}'.format(nblock),'utf-8'))
+            add_block(nblock)
+            self.confirmed_events=[]
         return response
     def StartEvent(self, request, context):
         

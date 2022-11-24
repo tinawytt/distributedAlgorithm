@@ -2,7 +2,7 @@ import hashlib
 import time
 
 # the upper bound of all potential nonces
-MAX_NONCE = 2**32
+MAX_NONCE = 20
 
 class Proof_of_work:
     def __init__(self,block):
